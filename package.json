@@ -1,0 +1,37 @@
+{
+  "name": "idle-dimensions",
+  "version": "0.2.2",
+  "description": "Idle Dimensions",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "author": "Gustavo Pudim",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^13.1.6",
+    "electron-builder": "^22.11.7"
+  },
+  "build": {
+    "appId": "gustavo-pudim.idle-dimensions",
+    "productName": "Idle Dimensions",
+    "directories": {
+      "buildResources": "build"
+    },
+    "mac": {
+      "category": "public.app-category.games"
+    },
+    "nsis": {
+      "oneClick": "false",
+      "perMachine": "true",
+      "allowToChangeInstallationDirectory": "true",
+      "installerIcon": "build/icon.ico",
+      "createDesktopShortcut": true
+    }
+  },
+  "dependencies": {
+    "dialogs": "^2.0.1"
+  }
+}

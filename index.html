@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Idle Dimensions</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="game">
+      <h1 id="matter-display">You have {{ Format(matter) }} Matter ({{ Format(MatterPerSec()) }}/s)</h1>
+      <div id="tabs">
+        <button @click="currentTab = 'dimensions'" v-bind:class="{ 'current-tab': currentTab === 'dimensions' }">Dimensions</button>
+        <button @click="currentTab = 'options'" v-bind:class="{ 'current-tab': currentTab === 'options' }">Options</button>
+      </div>
+      <div id="dimensions-tab" v-show="currentTab === 'dimensions'">
+        <div id="buying-tip">Hold shift for buying 10x and ctrl for 100x</div>
+        <div id="buy-max">
+          <button @click="BuyMaxDimensions()">Buy Max</button>
+        </div>
+        <div v-for="dimension in dimensions">
+          <dimension :dim="dimension"></dimension>
+        </div>
+      </div>
+      <div id="options-tab" v-show="currentTab === 'options'">
+        <div id="options">
+          <button @click="SaveGame(true)">Save Game</button>
+          <button @click="ExportGame()">Export Save</button>
+          <button @click="ImportGame()">Import Save</button>
+          <button @click="ResetGame()">Wipe Save</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="src/dependencies/vue.js"></script>
+    <script src="src/dependencies/decimal.js"></script>
+    <script src="src/dependencies/sweet-alert.js"></script>
+    <script src="src/storage.js"></script>
+    <script src="src/dimension.js"></script>
+    <script src="src/game.js"></script>
+    <script src="src/input-handler.js"></script>
+    <script src="src/components/dimension.js"></script>
+  </body>
+</html>
