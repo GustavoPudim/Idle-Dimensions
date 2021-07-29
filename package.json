@@ -31,7 +31,5 @@
       "createDesktopShortcut": true
     }
   },
-  "dependencies": {
-    "dialogs": "^2.0.1"
-  }
+  "dependencies": {}
 }
