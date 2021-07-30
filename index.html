@@ -8,8 +8,7 @@
     <div id="game">
       <h1 id="matter-display">You have {{ Format(matter) }} Matter ({{ Format(MatterPerSec()) }}/s)</h1>
       <div id="tabs">
-        <button @click="currentTab = 'dimensions'" v-bind:class="{ 'current-tab': currentTab === 'dimensions' }">Dimensions</button>
-        <button @click="currentTab = 'options'" v-bind:class="{ 'current-tab': currentTab === 'options' }">Options</button>
+        <tab-button v-for="tab in tabs" :id="tab.id" :display="tab.display"></tab-button>
       </div>
       <div id="dimensions-tab" v-show="currentTab === 'dimensions'">
         <div id="buying-tip">Hold shift for buying 10x and ctrl for 100x</div>
@@ -39,5 +38,6 @@
     <script src="src/game.js"></script>
     <script src="src/input-handler.js"></script>
     <script src="src/components/dimension.js"></script>
+    <script src="src/components/tab-button.js"></script>
   </body>
 </html>

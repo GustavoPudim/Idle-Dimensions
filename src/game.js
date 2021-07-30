@@ -17,6 +17,10 @@ var game = new Vue({
         matter: Decimal(0),
         totalMatter: Decimal(0),
         blackHoles: Decimal(0),
+        tabs: [
+            {'id': 'dimensions', 'display': 'Dimensions'},
+            {'id': 'options', 'display': 'Options'},
+        ],
         dimensions: []
     },
     methods: {
@@ -194,6 +198,14 @@ var game = new Vue({
             this.ClearDimensions()
 
             this.lastUpdate = Date.now()
+        },
+        SetTab(tab)
+        {
+            this.currentTab = tab
+        },
+        CheckTab(tab)
+        {
+            return this.currentTab === tab
         }
     }
   })
