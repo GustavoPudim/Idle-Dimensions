@@ -15,6 +15,7 @@ var game = new Vue({
         lastUpdate: Date.now(),
         buyAmount: 1,
         matter: Decimal(0),
+        blackHoles: Decimal(0),
         dimensions: []
     },
     methods: {
@@ -40,6 +41,13 @@ var game = new Vue({
         BuyMaxDimensions()
         {
             buyMaxDimensions(this.dimensions)
+        },
+        ResetForBlackHoles()
+        {
+            this.blackHoles = this.blackHoles.plus(getBlackHolesForMatter(this.matter))
+
+            this.matter = Decimal(0)
+            this.ClearDimensions()
         },
         Format(number)
         {
