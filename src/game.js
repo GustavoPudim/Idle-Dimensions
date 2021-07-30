@@ -15,6 +15,7 @@ var game = new Vue({
         lastUpdate: Date.now(),
         buyAmount: 1,
         matter: Decimal(0),
+        totalMatter: Decimal(0),
         blackHoles: Decimal(0),
         dimensions: []
     },
@@ -28,11 +29,15 @@ var game = new Vue({
 
             return m
         },
+        IncreaseMatter(m) {
+            this.matter = this.matter.plus(m)
+            this.totalMatter = this.totalMatter.plus(m)
+        },
         GameLoop () {
             let diff = (Date.now() - this.lastUpdate) / 1000
             this.lastUpdate = Date.now()
-
-            this.matter = this.matter.plus(this.MatterPerSec().times(diff))
+            
+            this.IncreaseMatter(this.MatterPerSec().times(diff))
 
             this.dimensions.forEach(dimension => {
                 dimension.mult = dimension.mult.plus(dimension.productionPerSec * diff)
