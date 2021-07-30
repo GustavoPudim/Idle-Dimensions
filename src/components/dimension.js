@@ -9,10 +9,10 @@ Vue.component('dimension', {
         </div>
         <div class="dimension-mult">{{ game.Format(dim.mult) }}x</div>
         <div class="dimension-buy" >
-            <button class="dimension-buy-button" @click="dim.buy(Math.min(game.buyAmount, Dimension.prestigeGap - dim.amount))"
+            <button class="dimension-buy-button" @click="dim.buy(dim.buyCap(game.buyAmount))"
             v-show="dim.amount < Dimension.prestigeGap"
-            v-bind:class="{ 'dimension-can-buy': dim.canBuy(Math.min(game.buyAmount, Dimension.prestigeGap - dim.amount)) }">
-            Buy {{ Math.min(game.buyAmount, Dimension.prestigeGap - dim.amount) }} for {{ game.Format(dim.cost(Math.min(game.buyAmount, Dimension.prestigeGap - dim.amount))) }} matter
+            v-bind:class="{ 'dimension-can-buy': dim.canBuy(dim.buyCap(game.buyAmount)) }">
+            Buy {{ dim.buyCap(game.buyAmount) }} for {{ game.Format(dim.cost(dim.buyCap(game.buyAmount))) }} matter
             </button>
             <button class="dimension-prestige-button" @click="dim.prestige()" v-show="dim.amount >= Dimension.prestigeGap">
             Prestige for 10x bonus

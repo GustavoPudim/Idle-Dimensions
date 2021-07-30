@@ -49,6 +49,11 @@ class Dimension {
         return game.matter.gte(this.cost(amount))
     }
 
+    buyCap(amount = 1)
+    {
+        return Math.min(amount, Dimension.prestigeGap - this.amount)
+    }
+
     get maxBuy()
     {
         let a = this.amount // Amount
@@ -60,7 +65,7 @@ class Dimension {
         let F = Decimal(i - 1).times(m).div(c).plus(Decimal.pow(i, a)) 
 
         // Min((ln(F) / ln(i)) - a, prestigeGap - a)
-        return Math.min(Decimal.floor(Decimal.ln(F).div(Decimal.ln(i))).minus(a).toNumber(), Dimension.prestigeGap - this.amount)
+        return this.buyCap(Decimal.floor(Decimal.ln(F).div(Decimal.ln(i))).minus(a).toNumber())
     }
 
     
