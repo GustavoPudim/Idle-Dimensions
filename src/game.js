@@ -18,8 +18,12 @@ var game = new Vue({
         totalMatter: Decimal(0),
         blackHoles: Decimal(0),
         tabs: [
-            {'id': 'dimensions', 'display': 'Dimensions'},
-            {'id': 'options', 'display': 'Options'},
+            {'id': 'dimensions', 'display': 'Dimensions', 'show': () => { return true }},
+            {'id': 'options', 'display': 'Options', 'show': () => { return true }},
+            {'id': 'black-hole', 'display': 'Black Hole', 'show': () => {
+                if(game) return game.totalMatter.gte(Decimal('1e50')) 
+                else return false
+            }}
         ],
         dimensions: []
     },
