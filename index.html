@@ -10,7 +10,7 @@
       <div id="tabs">
         <tab-button v-for="tab in tabs" :id="tab.id" :display="tab.display" :show="tab.show()"></tab-button>
       </div>
-      <div id="dimensions-tab" v-show="currentTab === 'dimensions'">
+      <div id="dimensions-tab" v-show="CheckTab('dimensions')">
         <div id="buying-tip">Hold shift for buying 10x and ctrl for 100x</div>
         <div id="buy-max">
           <button @click="BuyMaxDimensions()">Buy Max</button>
@@ -19,12 +19,20 @@
           <dimension :dim="dimension"></dimension>
         </div>
       </div>
-      <div id="options-tab" v-show="currentTab === 'options'">
+      <div id="options-tab" v-show="CheckTab('options')">
         <div id="options">
           <button @click="SaveGame(true)">Save Game</button>
           <button @click="ExportGame()">Export Save</button>
           <button @click="ImportGame()">Import Save</button>
           <button @click="ResetGame()">Wipe Save</button>
+        </div>
+      </div>
+      <div id="black-hole-tab" v-show="CheckTab('black-hole')">
+        <h2 id="black-holes-display">You have {{ blackHoles }} Black Holes</h2>
+        <div style="text-align: center;">
+          <button id="reset-for-black-holes" @click="ResetForBlackHoles()">
+            Reset everything for {{ Format(getBlackHolesForMatter(matter)) }} Black Holes
+          </button>
         </div>
       </div>
     </div>
