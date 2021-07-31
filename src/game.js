@@ -69,8 +69,17 @@ var game = new Vue({
         {
             buyMaxDimensions(this.dimensions)
         },
-        ResetForBlackHoles()
+        async ResetForBlackHoles()
         {
+            const value = await swal({
+                title: "Are you sure?",
+                text: "You will lose your matter and all your dimensions",
+                icon: "warning",
+                buttons: true
+            })
+
+            if(!value) return
+
             this.blackHoles = this.blackHoles.plus(getBlackHolesForMatter(this.matter))
 
             this.matter = Decimal(0)
