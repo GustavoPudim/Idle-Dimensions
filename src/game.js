@@ -101,9 +101,21 @@ var game = new Vue({
         {
             let data = {
                 matter: this.matter.toString(),
+                totalMatter: this.totalMatter.toString(),
+                blackHoles: this.blackHoles.toString(),
+                blackHoleUpgradesBought: '',
                 dimensions: '',
                 lastUpdate: this.lastUpdate
             }
+
+            let BHUsBought = {}
+
+            for(let key in this.blackHoleUpgrades)
+            {
+                BHUsBought[key] = this.blackHoleUpgrades[key].bought
+            }
+
+            data.blackHoleUpgradesBought = JSON.stringify(BHUsBought)
 
             let dims = []
 
@@ -119,8 +131,21 @@ var game = new Vue({
         {
             try 
             {
-                if(data.matter !== "undefined" && data.matter !== "null") this.matter = Decimal(data.matter)
-                if(data.dimensions !== "undefined" && data.dimensions !== "null") 
+                if(data.matter !== undefined && data.matter !== "null") this.matter = Decimal(data.matter)
+                if(data.totalMatter !== undefined && data.totalMatter !== "null") this.totalMatter = Decimal(data.totalMatter)
+                if(data.blackHoles !== undefined && data.blackHoles !== "null") this.blackHoles = Decimal(data.blackHoles)
+
+                if(data.blackHoleUpgradesBought !== undefined && data.blackHoleUpgradesBought !== "{}")
+                {
+                    let BHUsBought = JSON.parse(data.blackHoleUpgradesBought)
+
+                    for(let key in this.blackHoleUpgrades)
+                    {
+                        this.blackHoleUpgrades[key].bought = BHUsBought[key]
+                    }
+                }
+
+                if(data.dimensions !== undefined && data.dimensions !== "{}") 
                 {
                     let dims = JSON.parse(data.dimensions)
 
@@ -128,15 +153,17 @@ var game = new Vue({
                         this.dimensions[i].getDataFromObject(dim)
                     });
                 }
-                if(data.lastUpdate !== "undefined" && data.lastUpdate !== "null") this.lastUpdate = data.lastUpdate
+
+                if(data.lastUpdate !== undefined && data.lastUpdate !== "null") this.lastUpdate = data.lastUpdate
+                
                 return true
             }
             catch(e)
             {
                 console.log("ERROR! Couldn't load save")
-                console.log(e)
+                console.log(e)  
 
-                this.ResetGame()
+                this.ResetGame(false)
 
                 return false
             }
@@ -171,7 +198,13 @@ var game = new Vue({
         },
         LoadGame()
         {
-            let data = loadGame(['matter', 'dimensions', 'lastUpdate'])
+            let data = loadGame([
+                'matter',
+                'totalMatter',
+                'blackHoles',
+                'blackHoleUpgradesBought',
+                'dimensions',
+                'lastUpdate'])
             
             this.SetData(data)
         },
@@ -213,17 +246,20 @@ var game = new Vue({
                 this.dimensions[i] = new Dimension(dimensionNames[i], i + 1)
             }
         },
-        async ResetGame()
+        async ResetGame(alert = true)
         {
-            const value = await swal({
-                title: "Are you sure?",
-                text: "You will lose everything and will not be able to recover your current save",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
+            if(alert)
+            {
+                const value = await swal({
+                    title: "Are you sure?",
+                    text: "You will lose everything and will not be able to recover your current save",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
 
-            if(!value) return
+                if(!value) return
+            }
 
             this.matter = Decimal(0)
 
