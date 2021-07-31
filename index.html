@@ -28,11 +28,19 @@
         </div>
       </div>
       <div id="black-hole-tab" v-show="CheckTab('black-hole')">
-        <h2 id="black-holes-display">You have {{ blackHoles }} Black Holes</h2>
         <div style="text-align: center;">
+          <h2 id="black-holes-display">You have {{ blackHoles }} Black Holes</h2>
           <button id="reset-for-black-holes" @click="ResetForBlackHoles()">
             Reset everything for {{ Format(getBlackHolesForMatter(matter)) }} Black Holes
           </button>
+          <h2>Upgrades</h2>
+          <div id="black-hole-upgrades">
+            <button v-for="BHU in blackHoleUpgrades" class="black-hole-upgrade" @click="BHU.buy()" v-bind:class="{ 'black-hole-upgrade-bought': BHU.bought }">
+              {{ BHU.text }}
+              <br>
+              Cost: {{ Format(BHU.price) }} BH
+            </button>
+          </div>
         </div>
       </div>
     </div>

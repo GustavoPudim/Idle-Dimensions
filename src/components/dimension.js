@@ -15,7 +15,7 @@ Vue.component('dimension', {
             Buy {{ dim.buyCap(game.buyAmount) }} for {{ game.Format(dim.cost(dim.buyCap(game.buyAmount))) }} matter
             </button>
             <button class="dimension-prestige-button" @click="dim.prestige()" v-show="dim.amount >= Dimension.prestigeGap">
-            Prestige for 10x bonus
+            Prestige for {{ Dimension.prestigeBonus }}x bonus
             </button>
         </div>`
 })

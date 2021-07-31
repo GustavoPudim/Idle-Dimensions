@@ -210,6 +210,39 @@
 #reset-for-black-holes:hover {
     background-color: rgb(19, 19, 19);
     border-color: black;
+    transition: 0.15s;
+}
+
+#black-hole-upgrades {
+    display: grid;
+    gap: 10px 10px;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 100px 100px 100px;
+    height: 320px;
+    margin: auto;
+    width: 600px;
+}
+
+.black-hole-upgrade {
+    background-color: rgb(58, 58, 58);
+    border-color: rgb(20, 20, 20);
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    height: 100px;
+    user-select: none;
+}
+
+.black-hole-upgrade:hover {
+    background-color: rgb(19, 19, 19);
+    border-color: black;
+    transition: 0.15s;
+}
+
+.black-hole-upgrade-bought {
+    background-color: rgb(19, 19, 19);
+    border-color: black;
 }
 
 /* Black Holes */

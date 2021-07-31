@@ -17,6 +17,17 @@ var game = new Vue({
         matter: Decimal(0),
         totalMatter: Decimal(0),
         blackHoles: Decimal(0),
+        blackHoleUpgrades: {
+            'dimensionCost': new BlackHoleUpgrade("Decreases dim & prestige cost scaling (1.8x -> 1.7x, 1e29x -> 1e24x)", Decimal(1)),
+            'prestigeBonus': new BlackHoleUpgrade("Increases prestige bonus (10x -> 15x)", Decimal(2)),
+            'prestigeGap': new BlackHoleUpgrade("Decreases prestige gap (100 -> 90)", Decimal(5)),
+            'matterProduction1': new BlackHoleUpgrade("Increases matter production based on current matter (logM / 2)", Decimal(10)),
+            'matterProduction2': new BlackHoleUpgrade("Increases matter production based on total matter (logM / 2)", Decimal(25)),
+            'startBonus1': new BlackHoleUpgrade("Starts reset with one of each dim until 4th", Decimal(50)),
+            'startBonus2': new BlackHoleUpgrade("Starts reset with one of each dim", Decimal(100)),
+            'baseDimensionCost': new BlackHoleUpgrade("Decreases dim base cost (10x smaller)", Decimal(250)),
+            'multBonus': new BlackHoleUpgrade("Increases dims production based on BH's (0.1% per BH)", Decimal(1000))
+        },
         tabs: [
             {'id': 'dimensions', 'display': 'Dimensions', 'show': () => { return true }},
             {'id': 'options', 'display': 'Options', 'show': () => { return true }},
@@ -34,6 +45,9 @@ var game = new Vue({
             this.dimensions.forEach(dimension => {
                 m = m.times(dimension.mult)
             })
+
+            m = this.blackHoleUpgrades.matterProduction1.bought && this.matter > 0 ? m.times(Decimal.log10(this.matter).div(2)) : m
+            m = this.blackHoleUpgrades.matterProduction2.bought && this.totalMatter > 0 ? m.times(Decimal.log10(this.totalMatter).div(2)) : m
 
             return m
         },
@@ -61,6 +75,20 @@ var game = new Vue({
 
             this.matter = Decimal(0)
             this.ClearDimensions()
+
+            if(!this.blackHoleUpgrades.startBonus1.bought) return
+
+            for(let i = 0; i < 4; i ++)
+            {
+                this.dimensions[i].amount = 1
+            }
+
+            if(!this.blackHoleUpgrades.startBonus2.bought) return
+
+            for(let i = 4; i < this.dimensions.length; i ++)
+            {
+                this.dimensions[i].amount = 1
+            }
         },
         Format(number)
         {
