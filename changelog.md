@@ -1,3 +1,6 @@
+# Version 0.3.0
+- Added black holes and black hole upgrades
+
 # Version 0.2.2
 - Changed app icon
 - Improved styles
