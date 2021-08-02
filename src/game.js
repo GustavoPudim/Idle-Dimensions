@@ -1,13 +1,3 @@
-const dimensionNames = [
-    "1st Dimension",
-    "2nd Dimension",
-    "3rd Dimension",
-    "4th Dimension",
-    "5th Dimension",
-    "6th Dimension",
-    "7th Dimension"
-]
-
 var game = new Vue({
     el: '#game',
     data: {
@@ -36,10 +26,19 @@ var game = new Vue({
                 else return false
             }}
         ],
-        dimensions: []
+        dimensions: [
+            new Dimension("1st Dimension", 1),
+            new Dimension("2nd Dimension", 2),
+            new Dimension("3rd Dimension", 3),
+            new Dimension("4th Dimension", 4),
+            new Dimension("5th Dimension", 5),
+            new Dimension("6th Dimension", 6),
+            new Dimension("7th Dimension", 7)
+        ]
     },
     methods: {
-        MatterPerSec () {
+        MatterPerSec() 
+        {
             let m = Decimal(1)
 
             this.dimensions.forEach(dimension => {
@@ -51,60 +50,19 @@ var game = new Vue({
 
             return m
         },
-        IncreaseMatter(m) {
+        IncreaseMatter(m) 
+        {
             this.matter = this.matter.plus(m)
             this.totalMatter = this.totalMatter.plus(m)
-        },
-        GameLoop () {
-            let diff = (Date.now() - this.lastUpdate) / 1000
-            this.lastUpdate = Date.now()
-            
-            this.IncreaseMatter(this.MatterPerSec().times(diff))
-
-            this.dimensions.forEach(dimension => {
-                dimension.mult = dimension.mult.plus(dimension.productionPerSec * diff)
-            })
         },
         BuyMaxDimensions()
         {
             buyMaxDimensions(this.dimensions)
         },
-        async ResetForBlackHoles()
+        ResetForBlackHoles: resetForBlackHoles,
+        Format(n)
         {
-            const value = await swal({
-                title: "Are you sure?",
-                text: "You will lose your matter and all your dimensions",
-                icon: "warning",
-                buttons: true
-            })
-
-            if(!value) return
-
-            this.blackHoles = this.blackHoles.plus(getBlackHolesForMatter(this.matter))
-
-            this.matter = Decimal(0)
-            this.ClearDimensions()
-
-            if(!this.blackHoleUpgrades.startBonus1.bought) return
-
-            for(let i = 0; i < 4; i ++)
-            {
-                this.dimensions[i].amount = 1
-            }
-
-            if(!this.blackHoleUpgrades.startBonus2.bought) return
-
-            for(let i = 4; i < this.dimensions.length; i ++)
-            {
-                this.dimensions[i].amount = 1
-            }
-        },
-        Format(number)
-        {
-            if(number.lte(1000)) return number.toFixed(2)
-            power = Decimal.log10(number).floor()
-            mantissa = number.div(Decimal.pow(10, power))
-            return mantissa.toFixed(2) + "e" + power
+            return format(n)
         },
         GetData()
         {
@@ -248,12 +206,9 @@ var game = new Vue({
         },
         ClearDimensions()
         {
-            this.dimensions = []
-
-            for(let i = 0; i < dimensionNames.length; i++)
-            {
-                this.dimensions[i] = new Dimension(dimensionNames[i], i + 1)
-            }
+            this.dimensions.forEach(dim => {
+                dim.clearData()
+            })
         },
         async ResetGame(alert = true)
         {
@@ -290,5 +245,5 @@ var game = new Vue({
 game.ClearDimensions()
 game.LoadGame()
 
-loop = setInterval("game.GameLoop()", 50)
+loop = setInterval("gameLoop()", 50)
 loop = setInterval("game.SaveGame(false)", 1000 * 30)

@@ -137,4 +137,11 @@ class Dimension {
         if(obj.tier !== undefined) this.tier = obj.tier
     }
 
+    clearData()
+    {
+        this.amount = 0
+        this.mult = Decimal(1)
+        this.prestiges = 0
+    }
+
 }
