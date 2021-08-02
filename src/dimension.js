@@ -23,7 +23,7 @@ class Dimension {
     }
     static get prestigeCostMultiplier()
     {
-        return game.blackHoleUpgrades.dimensionCost.bought ? Decimal('1e24') : Decimal('1e29')
+        return game.blackHoleUpgrades.prestigeGap.bought ? Decimal('1e21') : (game.blackHoleUpgrades.dimensionCost.bought ? Decimal('1e24') : Decimal('1e29'))
     } 
     
     constructor (name, tier) {
