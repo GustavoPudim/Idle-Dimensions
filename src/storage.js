@@ -1,4 +1,4 @@
-function saveGame(data)
+function setStorageData(data)
 {
     for(let key in data)
     {
@@ -6,7 +6,7 @@ function saveGame(data)
     }
 }
 
-function loadGame(keys)
+function getStorageData(keys)
 {
     let data = {}
 
@@ -15,14 +15,4 @@ function loadGame(keys)
     })
 
     return data
-}
-
-function exportGame(data)
-{
-    return btoa(JSON.stringify(data))
-}
-
-function importGame(text)
-{
-    return JSON.parse(btoa(text))
 }

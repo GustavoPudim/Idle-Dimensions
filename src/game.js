@@ -34,6 +34,14 @@ var game = new Vue({
             new Dimension("5th Dimension", 5),
             new Dimension("6th Dimension", 6),
             new Dimension("7th Dimension", 7)
+        ],
+        loadKeys: [
+            'matter',
+            'totalMatter',
+            'blackHoles',
+            'blackHoleUpgradesBought',
+            'dimensions',
+            'lastUpdate'
         ]
     },
     methods: {
@@ -55,16 +63,11 @@ var game = new Vue({
             this.matter = this.matter.plus(m)
             this.totalMatter = this.totalMatter.plus(m)
         },
-        BuyMaxDimensions()
-        {
-            buyMaxDimensions(this.dimensions)
-        },
+        BuyMaxDimensions() { buyMaxDimensions(this.dimensions) },
         ResetForBlackHoles: resetForBlackHoles,
-        Format(n)
-        {
-            return format(n)
-        },
-        GetData()
+        Format(n) { return format(n) },
+        ClearDimensions() { this.dimensions.forEach(dim => { dim.clearData() }) },
+        GetGameData()
         {
             let data = {
                 matter: this.matter.toString(),
@@ -94,15 +97,15 @@ var game = new Vue({
 
             return data
         },
-        SetData(data)
+        SetGameData(data)
         {
             try 
             {
-                if(data.matter !== undefined && data.matter !== "null") this.matter = Decimal(data.matter)
-                if(data.totalMatter !== undefined && data.totalMatter !== "null") this.totalMatter = Decimal(data.totalMatter)
-                if(data.blackHoles !== undefined && data.blackHoles !== "null") this.blackHoles = Decimal(data.blackHoles)
+                if(data.matter) this.matter = Decimal(data.matter)
+                if(data.totalMatter) this.totalMatter = Decimal(data.totalMatter)
+                if(data.blackHoles) this.blackHoles = Decimal(data.blackHoles)
 
-                if(data.blackHoleUpgradesBought !== undefined && data.blackHoleUpgradesBought !== "{}")
+                if(data.blackHoleUpgradesBought)
                 {
                     let BHUsBought = JSON.parse(data.blackHoleUpgradesBought)
 
@@ -112,7 +115,7 @@ var game = new Vue({
                     }
                 }
 
-                if(data.dimensions !== undefined && data.dimensions !== "{}") 
+                if(data.dimensions) 
                 {
                     let dims = JSON.parse(data.dimensions)
 
@@ -121,7 +124,7 @@ var game = new Vue({
                     });
                 }
 
-                if(data.lastUpdate !== undefined && data.lastUpdate !== "null") this.lastUpdate = data.lastUpdate
+                if(data.lastUpdate) this.lastUpdate = data.lastUpdate
                 
                 return true
             }
@@ -135,88 +138,55 @@ var game = new Vue({
                 return false
             }
         },
-        SetDataFromB64(data)
+        SaveGame(withAlert = false)
         {
-            try
-            {
-                return this.SetData(JSON.parse(atob(data)))
-            }
-            catch (e)
-            {
-                console.log("ERROR! Couldn't load save")
-                console.log(e)
-                return false 
-            }
-        },
-        SaveGame(withAlert)
-        {
-            saveGame(this.GetData())
-            if(withAlert)
-            {
-                swal({
-                title: "Your game has been saved",
-                icon: "success"
-              })
-            }
-            else 
-            {
-                console.log("Game Saved")
-            }
-        },
-        LoadGame()
-        {
-            let data = loadGame([
-                'matter',
-                'totalMatter',
-                'blackHoles',
-                'blackHoleUpgradesBought',
-                'dimensions',
-                'lastUpdate'])
+            setStorageData(this.GetGameData())
+            console.log("Game Saved")  
+
+            if(!withAlert) return
             
-            this.SetData(data)
+            swal({ title: "Your game has been saved", icon: "success" })
+            
+        },
+        LoadGame(withAlert = false)
+        {
+            this.SetGameData(getStorageData(this.loadKeys))
+
+            if(!withAlert) return
+
+            swal({ title: "Your game has been loaded", icon: "success" })
         },
         ExportGame()
         {
-            navigator.clipboard.writeText(exportGame(this.GetData()))
+            navigator.clipboard.writeText(btoa(JSON.stringify(this.GetGameData())))
+
             swal("Save text copied to clipboard")
         },
         async ImportGame()
         {
-            const value = await swal({
-                title: "Paste your save text here:",
-                buttons: true,
-                content: "input"
-              })
-            if (value) {
-                console.log()
-                const sucess = this.SetDataFromB64(value)
+            const value = await swal({ title: "Paste your save text here:", buttons: true, content: "input" })
 
-                if(sucess)
-                {
-                    swal("Your save has been successfully imported!", {
-                    icon: "success",});
-                }
-                else
-                {
-                    swal("ERROR!", {
-                        text: "Your save text couldn't be imported",
-                        icon: "error"});
-                }
+            if(!value) return
+
+            try
+            {
+                let data = JSON.parse(atob(value))
+                
+                if(this.SetGameData(data)) swal("Your save has been successfully imported!", { icon: "success" });
+            }
+            catch(e) 
+            {
+                swal("ERROR!", { text: "Your save text couldn't be imported", icon: "error" });
+                console.log(e)
             }
         },
-        ClearDimensions()
+        async ResetGame(withAlert = true)
         {
-            this.dimensions.forEach(dim => {
-                dim.clearData()
-            })
-        },
-        async ResetGame(alert = true)
-        {
-            if(alert)
+            if(withAlert)
             {
                 const value = await swal({
                     title: "Are you sure?",
-                    text: "You will lose everything and will not be able to recover your current save",
+                    text: "You will erase all your progress and will not recieve any bonus",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
