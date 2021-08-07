@@ -30,8 +30,8 @@
       <div id="black-hole-tab" v-show="CheckTab('black-hole')">
         <div style="text-align: center;">
           <h2 id="black-holes-display">You have {{ Format(blackHoles) }} Black Holes</h2>
-          <button id="reset-for-black-holes" @click="ResetForBlackHoles()">
-            Reset everything for {{ Format(getBlackHolesForMatter(matter)) }} Black Holes
+          <button id="compress" @click="Compress()">
+            Compress the whole universe for {{ Format(getBlackHolesForMatter(matter)) }} Black Holes
           </button>
           <h2>Upgrades</h2>
           <div id="black-hole-upgrades">

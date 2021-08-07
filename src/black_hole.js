@@ -6,7 +6,7 @@ function getBlackHolesForMatter(m)
     return Decimal.floor(Decimal.pow(bhGrowth, Decimal.log(m).minus(bhGap)))
 }
 
-async function resetForBlackHoles(withAlert = true)
+async function compress(withAlert = true)
 {
     if(withAlert)
     {

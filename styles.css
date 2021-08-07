@@ -196,7 +196,7 @@
     text-align: center;
 }
 
-#reset-for-black-holes {
+#compress {
     background-color: rgb(58, 58, 58);
     border-color: rgb(20, 20, 20);
     border-radius: 4px;
@@ -207,7 +207,7 @@
     user-select: none;
 }
 
-#reset-for-black-holes:hover {
+#compress:hover {
     background-color: rgb(19, 19, 19);
     border-color: black;
     transition: 0.15s;

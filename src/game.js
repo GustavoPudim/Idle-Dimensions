@@ -65,7 +65,7 @@ var game = new Vue({
             this.totalMatter = this.totalMatter.plus(m)
         },
         BuyMaxDimensions() { buyMaxDimensions(this.dimensions) },
-        ResetForBlackHoles: resetForBlackHoles,
+        Compress: compress,
         Format(n) { return format(n) },
         ClearDimensions() { this.dimensions.forEach(dim => { dim.clearData() }) },
         GetGameData()
