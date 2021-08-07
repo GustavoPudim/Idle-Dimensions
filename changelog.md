@@ -1,3 +1,6 @@
+# Version 0.3.1
+- Balanced black hole upgrades
+- Added *8th Dimension*
 # Version 0.3.0
 - Added black holes and black hole upgrades
 
