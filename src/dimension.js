@@ -11,7 +11,7 @@ class Dimension {
     
     static get costMultiplier() 
     { 
-        return game.blackHoleUpgrades.dimensionCost.bought ? 1.7 : 1.8
+        return game.blackHoleUpgrades.dimensionCost.bought ? 1.65 : 1.8
     }
     static get prestigeBonus()
     {
@@ -23,9 +23,14 @@ class Dimension {
     }
     static get prestigeCostMultiplier()
     {
-        return game.blackHoleUpgrades.prestigeGap.bought ? Decimal('1e21') : (game.blackHoleUpgrades.dimensionCost.bought ? Decimal('1e24') : Decimal('1e29'))
+        return game.blackHoleUpgrades.prestigeGap.bought ? Decimal('1e20') : (game.blackHoleUpgrades.dimensionCost.bought ? Decimal('1e24') : Decimal('1e29'))
     } 
     
+    get locked()
+    {
+        return this.tier === 8 ? !game.blackHoleUpgrades.eightDimension.bought : false
+    }
+
     constructor (name, tier) {
         this.name = name
         this.tier = tier
@@ -39,7 +44,7 @@ class Dimension {
     {
         let c = Decimal.pow(10, (this.tier) * (this.tier + 1) / 2) // Base cost without prestige
         let p = Decimal.pow(Dimension.prestigeCostMultiplier, this.prestiges) // Prestige cost multiplier
-        let u = game.blackHoleUpgrades.baseDimensionCost.bought ? 0.1 : 1 // Black hole upgrade multiplier
+        let u = game.blackHoleUpgrades.baseDimensionCost.bought ? Decimal.pow(0.1, this.tier) : 1 // Black hole upgrade multiplier
         return c.times(p).times(u)
     }
 
@@ -101,7 +106,7 @@ class Dimension {
         let a = Decimal(this.amount + this.prestiges * Dimension.prestigeGap) // Real Amount
         let p = Decimal.pow(Dimension.prestigeBonus, this.prestiges) // Total prestige bonus
         let t = Decimal.pow(0.5, this.tier - 1) // Tier Debuff
-        let u = game.blackHoleUpgrades.multBonus.bought ? game.blackHoles.div(1000).plus(1) : 1 // Black hole upgrade bonus
+        let u = game.blackHoleUpgrades.multBonus.bought ? game.blackHoles.times(0.01).plus(1) : 1 // Black hole upgrade bonus
 
         return a.times(p).times(t).times(u)
     }

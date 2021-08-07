@@ -25,19 +25,11 @@ async function resetForBlackHoles(withAlert = true)
     game.matter = Decimal(0)
     game.ClearDimensions()
 
-    if(!game.blackHoleUpgrades.startBonus1.bought) return
+    if(!game.blackHoleUpgrades.startBonus.bought) return
 
-    for(let i = 0; i < 4; i ++)
-    {
-        game.dimensions[i].amount = 1
-    }
-
-    if(!game.blackHoleUpgrades.startBonus2.bought) return
-
-    for(let i = 4; i < game.dimensions.length; i ++)
-    {
-        game.dimensions[i].amount = 1
-    }
+    game.dimensions.forEach(dim => { dim.amount = 1 });
+    
+    game.dimensions[7].amount = game.blackHoleUpgrades.eightDimension.bought ? 1 : 0
 }
 
 class BlackHoleUpgrade

@@ -2,7 +2,8 @@ Vue.component('dimension', {
     props: {
         dim: Dimension
     },
-    template: `<div class="dimension" v-show="dim.tier === 1 || game.dimensions[dim.tier - 2].amount > 0 || game.dimensions[dim.tier - 2].prestiges > 0">
+    template: `<div class="dimension" v-if="!dim.locked"
+    v-show="dim.tier === 1 || game.dimensions[dim.tier - 2].amount > 0 || game.dimensions[dim.tier - 2].prestiges > 0">
         <div class="dimension-name"> {{ dim.name }} </div>
         <div class="dimension-amount">
             {{ dim.amount }} <span class="dimension-prestige" v-show="dim.prestiges > 0">({{ dim.prestiges }})</span>

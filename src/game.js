@@ -8,15 +8,15 @@ var game = new Vue({
         totalMatter: Decimal(0),
         blackHoles: Decimal(0),
         blackHoleUpgrades: {
-            'dimensionCost': new BlackHoleUpgrade("Decreases dim & prestige cost scaling (1.8x -> 1.7x, 1e29x -> 1e24x)", Decimal(1)),
+            'dimensionCost': new BlackHoleUpgrade("Decreases dim & prestige cost scaling (1.8x -> 1.65x, 1e29x -> 1e24x)", Decimal(1)),
             'prestigeBonus': new BlackHoleUpgrade("Increases prestige bonus (10x -> 15x)", Decimal(2)),
-            'prestigeGap': new BlackHoleUpgrade("Decreases prestige gap (100 -> 90)", Decimal(5)),
-            'matterProduction1': new BlackHoleUpgrade("Increases matter production based on current matter (logM / 2)", Decimal(10)),
-            'matterProduction2': new BlackHoleUpgrade("Increases matter production based on total matter (logM / 2)", Decimal(25)),
-            'startBonus1': new BlackHoleUpgrade("Starts reset with one of each dim until 4th", Decimal(50)),
-            'startBonus2': new BlackHoleUpgrade("Starts reset with one of each dim", Decimal(100)),
-            'baseDimensionCost': new BlackHoleUpgrade("Decreases dim base cost (10x smaller)", Decimal(250)),
-            'multBonus': new BlackHoleUpgrade("Increases dims production based on BH's (0.1% per BH)", Decimal(1000))
+            'prestigeGap': new BlackHoleUpgrade("Decreases prestige gap (100 -> 90)", Decimal(4)),
+            'matterProduction1': new BlackHoleUpgrade("Increases matter production based on current matter (2*log(m))", Decimal(6)),
+            'matterProduction2': new BlackHoleUpgrade("Increases matter production based on total matter (2*log(M))", Decimal(8)),
+            'startBonus': new BlackHoleUpgrade("Starts reset with one of each dim", Decimal(10)),
+            'baseDimensionCost': new BlackHoleUpgrade("Decreases dims base cost (10^(n*(n + 1)/2) -> 10^(n*(n - 1)/2))", Decimal(15)),
+            'multBonus': new BlackHoleUpgrade("Increases dims production based on BH's (1% per BH)", Decimal(20)),
+            'eightDimension': new BlackHoleUpgrade("Unlocks 8th dimension", Decimal(50))
         },
         tabs: [
             {'id': 'dimensions', 'display': 'Dimensions', 'show': () => { return true }},
@@ -33,7 +33,8 @@ var game = new Vue({
             new Dimension("4th Dimension", 4),
             new Dimension("5th Dimension", 5),
             new Dimension("6th Dimension", 6),
-            new Dimension("7th Dimension", 7)
+            new Dimension("7th Dimension", 7),
+            new Dimension("8th Dimension", 8)
         ],
         loadKeys: [
             'matter',
@@ -53,8 +54,8 @@ var game = new Vue({
                 m = m.times(dimension.mult)
             })
 
-            m = this.blackHoleUpgrades.matterProduction1.bought && this.matter > 0 ? m.times(Decimal.log10(this.matter).div(2)) : m
-            m = this.blackHoleUpgrades.matterProduction2.bought && this.totalMatter > 0 ? m.times(Decimal.log10(this.totalMatter).div(2)) : m
+            m = this.blackHoleUpgrades.matterProduction1.bought && this.matter > 0 ? m.times(Decimal.max(1, Decimal.log10(this.matter).times(2))) : m
+            m = this.blackHoleUpgrades.matterProduction2.bought && this.totalMatter > 0 ? m.times(Decimal.max(1, Decimal.log10(this.totalMatter).times(2))) : m
 
             return m
         },
